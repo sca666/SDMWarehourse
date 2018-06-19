@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xin.cymall.dao.ChangebillDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="xin.cymall.entity.Changebill" id="changebillMap">
+        <result property="changebillId" column="changeBill_id"/>
+        <result property="inputcompanyId" column="inputCompany_id"/>
+        <result property="outputcompanyId" column="outputCompany_id"/>
+        <result property="commodityId" column="commodity_id"/>
+        <result property="intputId" column="intput_id"/>
+        <result property="outputId" column="output_id"/>
+        <result property="changenum" column="changeNum"/>
+    </resultMap>
+
+	<select id="get" resultType="xin.cymall.entity.Changebill">
+		select * from t_changebill where changeBill_id = #{value}
+	</select>
+
+	<select id="getList" resultType="xin.cymall.entity.Changebill">
+		select * from t_changebill t <include refid="where_clause" />
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by changeBill_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="getCount" resultType="int">
+		select count(*) from t_changebill t  <include refid="where_clause" />
+	</select>
+
+    <!-- 搜索数据区域 -->
+    <sql id="where_clause">
+        <where>
+            1=1
+            <if test="changebillId != null and changebillId != ''"> and t.changeBill_id = #{changebillId} </if>
+    		<if test="changebillIdVague != null and changebillIdVague != ''"> and t.changeBill_id like concat('%',#{changebillIdVague},'%') </if>
+            <if test="inputcompanyId != null and inputcompanyId != ''"> and t.inputCompany_id = #{inputcompanyId} </if>
+    		<if test="inputcompanyIdVague != null and inputcompanyIdVague != ''"> and t.inputCompany_id like concat('%',#{inputcompanyIdVague},'%') </if>
+            <if test="outputcompanyId != null and outputcompanyId != ''"> and t.outputCompany_id = #{outputcompanyId} </if>
+    		<if test="outputcompanyIdVague != null and outputcompanyIdVague != ''"> and t.outputCompany_id like concat('%',#{outputcompanyIdVague},'%') </if>
+            <if test="commodityId != null and commodityId != ''"> and t.commodity_id = #{commodityId} </if>
+    		<if test="commodityIdVague != null and commodityIdVague != ''"> and t.commodity_id like concat('%',#{commodityIdVague},'%') </if>
+            <if test="intputId != null and intputId != ''"> and t.intput_id = #{intputId} </if>
+    		<if test="intputIdVague != null and intputIdVague != ''"> and t.intput_id like concat('%',#{intputIdVague},'%') </if>
+            <if test="outputId != null and outputId != ''"> and t.output_id = #{outputId} </if>
+    		<if test="outputIdVague != null and outputIdVague != ''"> and t.output_id like concat('%',#{outputIdVague},'%') </if>
+            <if test="changenum != null and changenum != ''"> and t.changeNum = #{changenum} </if>
+    		<if test="changenumVague != null and changenumVague != ''"> and t.changeNum like concat('%',#{changenumVague},'%') </if>
+        </where>
+    </sql>
+	 
+	<insert id="save" parameterType="xin.cymall.entity.Changebill" useGeneratedKeys="true" keyProperty="changebillId">
+		insert into t_changebill
+		(
+			`inputCompany_id`, 
+			`outputCompany_id`, 
+			`commodity_id`, 
+			`intput_id`, 
+			`output_id`, 
+			`changeNum`
+		)
+		values
+		(
+			#{inputcompanyId}, 
+			#{outputcompanyId}, 
+			#{commodityId}, 
+			#{intputId}, 
+			#{outputId}, 
+			#{changenum}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="xin.cymall.entity.Changebill">
+		update t_changebill 
+		<set>
+			<if test="inputcompanyId != null">`inputCompany_id` = #{inputcompanyId}, </if>
+			<if test="outputcompanyId != null">`outputCompany_id` = #{outputcompanyId}, </if>
+			<if test="commodityId != null">`commodity_id` = #{commodityId}, </if>
+			<if test="intputId != null">`intput_id` = #{intputId}, </if>
+			<if test="outputId != null">`output_id` = #{outputId}, </if>
+			<if test="changenum != null">`changeNum` = #{changenum}</if>
+		</set>
+		where changeBill_id = #{changebillId}
+	</update>
+	
+	<delete id="delete">
+		delete from t_changebill where changeBill_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from t_changebill where changeBill_id in 
+		<foreach item="changebillId" collection="array" open="(" separator="," close=")">
+			#{changebillId}
+		</foreach>
+	</delete>
+
+</mapper>

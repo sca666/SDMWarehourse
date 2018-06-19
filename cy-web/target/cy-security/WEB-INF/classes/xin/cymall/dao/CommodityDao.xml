@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xin.cymall.dao.CommodityDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="xin.cymall.entity.Commodity" id="commodityMap">
+        <result property="commodityId" column="commodity_id"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="unitCode" column="unit_code"/>
+        <result property="spec" column="spec"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="get" resultType="xin.cymall.entity.Commodity">
+		select * from t_commodity where commodity_id = #{value}
+	</select>
+
+	<select id="getcodenum" resultType="xin.cymall.entity.Commodity">
+		SELECT * FROM t_commodity WHERE code = #{code}
+	</select>
+	
+	<select id="getList" resultType="xin.cymall.entity.Commodity">
+		select * from t_commodity t
+        <where>
+            1=1
+            <if test="name != null and name != ''"> AND t.name LIKE concat('%',#{name},'%')</if>
+        </where>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by commodity_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="getCount" resultType="int">
+		select count(*) from t_commodity t  <include refid="where_clause" />
+	</select>
+
+    <!-- 搜索数据区域 -->
+    <sql id="where_clause">
+        <where>
+            1=1
+            <if test="commodityId != null and commodityId != ''"> and t.commodity_id = #{commodityId} </if>
+    		<if test="commodityIdVague != null and commodityIdVague != ''"> and t.commodity_id like concat('%',#{commodityIdVague},'%') </if>
+            <if test="categoryId != null and categoryId != ''"> and t.category_id = #{categoryId} </if>
+    		<if test="categoryIdVague != null and categoryIdVague != ''"> and t.category_id like concat('%',#{categoryIdVague},'%') </if>
+            <if test="code != null and code != ''"> and t.code = #{code} </if>
+    		<if test="codeVague != null and codeVague != ''"> and t.code like concat('%',#{codeVague},'%') </if>
+            <if test="name != null and name != ''"> and t.name = #{name} </if>
+    		<if test="nameVague != null and nameVague != ''"> and t.name like concat('%',#{nameVague},'%') </if>
+            <if test="unitCode != null and unitCode != ''"> and t.unit_code = #{unitCode} </if>
+    		<if test="unitCodeVague != null and unitCodeVague != ''"> and t.unit_code like concat('%',#{unitCodeVague},'%') </if>
+            <if test="spec != null and spec != ''"> and t.spec = #{spec} </if>
+    		<if test="specVague != null and specVague != ''"> and t.spec like concat('%',#{specVague},'%') </if>
+            <if test="remark != null and remark != ''"> and t.remark = #{remark} </if>
+    		<if test="remarkVague != null and remarkVague != ''"> and t.remark like concat('%',#{remarkVague},'%') </if>
+        </where>
+    </sql>
+	 
+	<insert id="save" parameterType="xin.cymall.entity.Commodity" useGeneratedKeys="true" keyProperty="commodityId">
+		insert into t_commodity
+		(
+			`category_id`, 
+			`code`, 
+			`name`, 
+			`unit_code`, 
+			`spec`, 
+			`remark`
+		)
+		values
+		(
+			#{categoryId}, 
+			#{code}, 
+			#{name}, 
+			#{unitCode}, 
+			#{spec}, 
+			#{remark}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="xin.cymall.entity.Commodity">
+		update t_commodity 
+		<set>
+			<if test="categoryId != null">`category_id` = #{categoryId}, </if>
+			<if test="code != null">`code` = #{code}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="unitCode != null">`unit_code` = #{unitCode}, </if>
+			<if test="spec != null">`spec` = #{spec}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where commodity_id = #{commodityId}
+	</update>
+	
+	<delete id="delete">
+		delete from t_commodity where commodity_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from t_commodity where commodity_id in 
+		<foreach item="commodityId" collection="array" open="(" separator="," close=")">
+			#{commodityId}
+		</foreach>
+	</delete>
+
+</mapper>

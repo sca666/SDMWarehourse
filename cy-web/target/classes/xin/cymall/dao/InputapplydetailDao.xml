@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xin.cymall.dao.InputapplydetailDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="xin.cymall.entity.Inputapplydetail" id="inputapplydetailMap">
+        <result property="inputapplydetailId" column="inputApplyDetail_id"/>
+        <result property="intputapplymainId" column="intputApplyMain_id"/>
+        <result property="commodityId" column="commodity_id"/>
+        <result property="planinputnum" column="planInputNum"/>
+        <result property="actualinputnum`actualinputnum" column="actualInputNum`actualInputNum"/>
+        <result property="allocainputnum" column="allocaInputNum"/>
+        <result property="notinputnum" column="notInputNum"/>
+        <result property="unitId" column="unit_id"/>
+        <result property="inputDate" column="input_date"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="get" resultType="xin.cymall.entity.Inputapplydetail">
+		select * from t_inputapplydetail where inputApplyDetail_id = #{value}
+	</select>
+
+	<select id="getList" resultType="xin.cymall.entity.Inputapplydetail">
+		select * from t_inputapplydetail t <include refid="where_clause" />
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by inputApplyDetail_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="getCount" resultType="int">
+		select count(*) from t_inputapplydetail t  <include refid="where_clause" />
+	</select>
+
+    <!-- 搜索数据区域 -->
+    <sql id="where_clause">
+        <where>
+            1=1
+            <if test="inputapplydetailId != null and inputapplydetailId != ''"> and t.inputApplyDetail_id = #{inputapplydetailId} </if>
+    		<if test="inputapplydetailIdVague != null and inputapplydetailIdVague != ''"> and t.inputApplyDetail_id like concat('%',#{inputapplydetailIdVague},'%') </if>
+            <if test="intputapplymainId != null and intputapplymainId != ''"> and t.intputApplyMain_id = #{intputapplymainId} </if>
+    		<if test="intputapplymainIdVague != null and intputapplymainIdVague != ''"> and t.intputApplyMain_id like concat('%',#{intputapplymainIdVague},'%') </if>
+            <if test="commodityId != null and commodityId != ''"> and t.commodity_id = #{commodityId} </if>
+    		<if test="commodityIdVague != null and commodityIdVague != ''"> and t.commodity_id like concat('%',#{commodityIdVague},'%') </if>
+            <if test="planinputnum != null and planinputnum != ''"> and t.planInputNum = #{planinputnum} </if>
+    		<if test="planinputnumVague != null and planinputnumVague != ''"> and t.planInputNum like concat('%',#{planinputnumVague},'%') </if>
+            <if test="actualinputnum`actualinputnum != null and actualinputnum`actualinputnum != ''"> and t.actualInputNum`actualInputNum = #{actualinputnum`actualinputnum} </if>
+    		<if test="actualinputnum`actualinputnumVague != null and actualinputnum`actualinputnumVague != ''"> and t.actualInputNum`actualInputNum like concat('%',#{actualinputnum`actualinputnumVague},'%') </if>
+            <if test="allocainputnum != null and allocainputnum != ''"> and t.allocaInputNum = #{allocainputnum} </if>
+    		<if test="allocainputnumVague != null and allocainputnumVague != ''"> and t.allocaInputNum like concat('%',#{allocainputnumVague},'%') </if>
+            <if test="notinputnum != null and notinputnum != ''"> and t.notInputNum = #{notinputnum} </if>
+    		<if test="notinputnumVague != null and notinputnumVague != ''"> and t.notInputNum like concat('%',#{notinputnumVague},'%') </if>
+            <if test="unitId != null and unitId != ''"> and t.unit_id = #{unitId} </if>
+    		<if test="unitIdVague != null and unitIdVague != ''"> and t.unit_id like concat('%',#{unitIdVague},'%') </if>
+            <if test="inputDate != null and inputDate != ''"> and t.input_date = #{inputDate} </if>
+    		<if test="inputDateVague != null and inputDateVague != ''"> and t.input_date like concat('%',#{inputDateVague},'%') </if>
+            <if test="remark != null and remark != ''"> and t.remark = #{remark} </if>
+    		<if test="remarkVague != null and remarkVague != ''"> and t.remark like concat('%',#{remarkVague},'%') </if>
+        </where>
+    </sql>
+	 
+	<insert id="save" parameterType="xin.cymall.entity.Inputapplydetail" useGeneratedKeys="true" keyProperty="inputapplydetailId">
+		insert into t_inputapplydetail
+		(
+			`intputApplyMain_id`, 
+			`commodity_id`, 
+			`planInputNum`, 
+			`actualInputNum`actualInputNum`, 
+			`allocaInputNum`, 
+			`notInputNum`, 
+			`unit_id`, 
+			`input_date`, 
+			`remark`
+		)
+		values
+		(
+			#{intputapplymainId}, 
+			#{commodityId}, 
+			#{planinputnum}, 
+			#{actualinputnum`actualinputnum}, 
+			#{allocainputnum}, 
+			#{notinputnum}, 
+			#{unitId}, 
+			#{inputDate}, 
+			#{remark}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="xin.cymall.entity.Inputapplydetail">
+		update t_inputapplydetail 
+		<set>
+			<if test="intputapplymainId != null">`intputApplyMain_id` = #{intputapplymainId}, </if>
+			<if test="commodityId != null">`commodity_id` = #{commodityId}, </if>
+			<if test="planinputnum != null">`planInputNum` = #{planinputnum}, </if>
+			<if test="actualinputnum`actualinputnum != null">`actualInputNum`actualInputNum` = #{actualinputnum`actualinputnum}, </if>
+			<if test="allocainputnum != null">`allocaInputNum` = #{allocainputnum}, </if>
+			<if test="notinputnum != null">`notInputNum` = #{notinputnum}, </if>
+			<if test="unitId != null">`unit_id` = #{unitId}, </if>
+			<if test="inputDate != null">`input_date` = #{inputDate}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where inputApplyDetail_id = #{inputapplydetailId}
+	</update>
+	
+	<delete id="delete">
+		delete from t_inputapplydetail where inputApplyDetail_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from t_inputapplydetail where inputApplyDetail_id in 
+		<foreach item="inputapplydetailId" collection="array" open="(" separator="," close=")">
+			#{inputapplydetailId}
+		</foreach>
+	</delete>
+
+</mapper>

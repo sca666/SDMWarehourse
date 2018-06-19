@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xin.cymall.dao.UserDao">
+
+    <resultMap id="userMap" type="xin.cymall.entity.User">
+        <result property="id" column="id"/>
+        <result property="age" column="age"/>
+        <result property="user_name" column="user_name"/>
+        <result property="password" column="password"/>
+
+    </resultMap>
+
+
+    <select id="getAllUser" resultType="xin.cymall.entity.User">
+         SELECT  id ,user_name,password,age FROM user_t
+    </select>
+
+</mapper>

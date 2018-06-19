@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xin.cymall.dao.ComsetmaindetailDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="xin.cymall.entity.Comsetmaindetail" id="comsetmaindetailMap">
+        <result property="comsetmaindetailId" column="comSetMainDetail_id"/>
+        <result property="comsetmainId" column="comSetMain_id"/>
+        <result property="comsetdetailId" column="comSetDetail_id"/>
+    </resultMap>
+
+	<select id="get" resultType="xin.cymall.entity.Comsetmaindetail">
+		select * from t_comsetmaindetail where comSetMainDetail_id = #{value}
+	</select>
+
+	<select id="getList" resultType="xin.cymall.entity.Comsetmaindetail">
+		select * from t_comsetmaindetail t <include refid="where_clause" />
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by comSetMainDetail_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="getCount" resultType="int">
+		select count(*) from t_comsetmaindetail t  <include refid="where_clause" />
+	</select>
+
+    <!-- 搜索数据区域 -->
+    <sql id="where_clause">
+        <where>
+            1=1
+            <if test="comsetmaindetailId != null and comsetmaindetailId != ''"> and t.comSetMainDetail_id = #{comsetmaindetailId} </if>
+    		<if test="comsetmaindetailIdVague != null and comsetmaindetailIdVague != ''"> and t.comSetMainDetail_id like concat('%',#{comsetmaindetailIdVague},'%') </if>
+            <if test="comsetmainId != null and comsetmainId != ''"> and t.comSetMain_id = #{comsetmainId} </if>
+    		<if test="comsetmainIdVague != null and comsetmainIdVague != ''"> and t.comSetMain_id like concat('%',#{comsetmainIdVague},'%') </if>
+            <if test="comsetdetailId != null and comsetdetailId != ''"> and t.comSetDetail_id = #{comsetdetailId} </if>
+    		<if test="comsetdetailIdVague != null and comsetdetailIdVague != ''"> and t.comSetDetail_id like concat('%',#{comsetdetailIdVague},'%') </if>
+        </where>
+    </sql>
+	 
+	<insert id="save" parameterType="xin.cymall.entity.Comsetmaindetail" useGeneratedKeys="true" keyProperty="comsetmaindetailId">
+		insert into t_comsetmaindetail
+		(
+			`comSetMain_id`, 
+			`comSetDetail_id`
+		)
+		values
+		(
+			#{comsetmainId}, 
+			#{comsetdetailId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="xin.cymall.entity.Comsetmaindetail">
+		update t_comsetmaindetail 
+		<set>
+			<if test="comsetmainId != null">`comSetMain_id` = #{comsetmainId}, </if>
+			<if test="comsetdetailId != null">`comSetDetail_id` = #{comsetdetailId}</if>
+		</set>
+		where comSetMainDetail_id = #{comsetmaindetailId}
+	</update>
+	
+	<delete id="delete">
+		delete from t_comsetmaindetail where comSetMainDetail_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from t_comsetmaindetail where comSetMainDetail_id in 
+		<foreach item="comsetmaindetailId" collection="array" open="(" separator="," close=")">
+			#{comsetmaindetailId}
+		</foreach>
+	</delete>
+
+</mapper>

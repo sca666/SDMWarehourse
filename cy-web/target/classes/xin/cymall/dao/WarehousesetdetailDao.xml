@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xin.cymall.dao.WarehousesetdetailDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="xin.cymall.entity.Warehousesetdetail" id="warehousesetdetailMap">
+        <result property="housesetdetailId" column="houseSetDetail_id"/>
+        <result property="warehouseId" column="warehouse_id"/>
+        <result property="commodityId" column="commodity_id"/>
+        <result property="outputnum" column="outputNum"/>
+        <result property="inputId" column="input_id"/>
+        <result property="outputId" column="output_id"/>
+        <result property="intputDate" column="intput_date"/>
+        <result property="outputDate" column="output_date"/>
+        <result property="depositDays" column="deposit_days"/>
+        <result property="basicrentId" column="basicRent_id"/>
+        <result property="raiserentId" column="raiseRent_id"/>
+        <result property="settlementStatus" column="Settlement_status"/>
+        <result property="price" column="price"/>
+        <result property="totalMoney" column="total_money"/>
+        <result property="loadingcost" column="loadingCost"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="get" resultType="xin.cymall.entity.Warehousesetdetail">
+		select * from t_warehousesetdetail where houseSetDetail_id = #{value}
+	</select>
+
+	<select id="getList" resultType="xin.cymall.entity.Warehousesetdetail">
+		select * from t_warehousesetdetail t <include refid="where_clause" />
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by houseSetDetail_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="getCount" resultType="int">
+		select count(*) from t_warehousesetdetail t  <include refid="where_clause" />
+	</select>
+
+    <!-- 搜索数据区域 -->
+    <sql id="where_clause">
+        <where>
+            1=1
+            <if test="housesetdetailId != null and housesetdetailId != ''"> and t.houseSetDetail_id = #{housesetdetailId} </if>
+    		<if test="housesetdetailIdVague != null and housesetdetailIdVague != ''"> and t.houseSetDetail_id like concat('%',#{housesetdetailIdVague},'%') </if>
+            <if test="warehouseId != null and warehouseId != ''"> and t.warehouse_id = #{warehouseId} </if>
+    		<if test="warehouseIdVague != null and warehouseIdVague != ''"> and t.warehouse_id like concat('%',#{warehouseIdVague},'%') </if>
+            <if test="commodityId != null and commodityId != ''"> and t.commodity_id = #{commodityId} </if>
+    		<if test="commodityIdVague != null and commodityIdVague != ''"> and t.commodity_id like concat('%',#{commodityIdVague},'%') </if>
+            <if test="outputnum != null and outputnum != ''"> and t.outputNum = #{outputnum} </if>
+    		<if test="outputnumVague != null and outputnumVague != ''"> and t.outputNum like concat('%',#{outputnumVague},'%') </if>
+            <if test="inputId != null and inputId != ''"> and t.input_id = #{inputId} </if>
+    		<if test="inputIdVague != null and inputIdVague != ''"> and t.input_id like concat('%',#{inputIdVague},'%') </if>
+            <if test="outputId != null and outputId != ''"> and t.output_id = #{outputId} </if>
+    		<if test="outputIdVague != null and outputIdVague != ''"> and t.output_id like concat('%',#{outputIdVague},'%') </if>
+            <if test="intputDate != null and intputDate != ''"> and t.intput_date = #{intputDate} </if>
+    		<if test="intputDateVague != null and intputDateVague != ''"> and t.intput_date like concat('%',#{intputDateVague},'%') </if>
+            <if test="outputDate != null and outputDate != ''"> and t.output_date = #{outputDate} </if>
+    		<if test="outputDateVague != null and outputDateVague != ''"> and t.output_date like concat('%',#{outputDateVague},'%') </if>
+            <if test="depositDays != null and depositDays != ''"> and t.deposit_days = #{depositDays} </if>
+    		<if test="depositDaysVague != null and depositDaysVague != ''"> and t.deposit_days like concat('%',#{depositDaysVague},'%') </if>
+            <if test="basicrentId != null and basicrentId != ''"> and t.basicRent_id = #{basicrentId} </if>
+    		<if test="basicrentIdVague != null and basicrentIdVague != ''"> and t.basicRent_id like concat('%',#{basicrentIdVague},'%') </if>
+            <if test="raiserentId != null and raiserentId != ''"> and t.raiseRent_id = #{raiserentId} </if>
+    		<if test="raiserentIdVague != null and raiserentIdVague != ''"> and t.raiseRent_id like concat('%',#{raiserentIdVague},'%') </if>
+            <if test="settlementStatus != null and settlementStatus != ''"> and t.Settlement_status = #{settlementStatus} </if>
+    		<if test="settlementStatusVague != null and settlementStatusVague != ''"> and t.Settlement_status like concat('%',#{settlementStatusVague},'%') </if>
+            <if test="price != null and price != ''"> and t.price = #{price} </if>
+    		<if test="priceVague != null and priceVague != ''"> and t.price like concat('%',#{priceVague},'%') </if>
+            <if test="totalMoney != null and totalMoney != ''"> and t.total_money = #{totalMoney} </if>
+    		<if test="totalMoneyVague != null and totalMoneyVague != ''"> and t.total_money like concat('%',#{totalMoneyVague},'%') </if>
+            <if test="loadingcost != null and loadingcost != ''"> and t.loadingCost = #{loadingcost} </if>
+    		<if test="loadingcostVague != null and loadingcostVague != ''"> and t.loadingCost like concat('%',#{loadingcostVague},'%') </if>
+            <if test="remark != null and remark != ''"> and t.remark = #{remark} </if>
+    		<if test="remarkVague != null and remarkVague != ''"> and t.remark like concat('%',#{remarkVague},'%') </if>
+        </where>
+    </sql>
+	 
+	<insert id="save" parameterType="xin.cymall.entity.Warehousesetdetail" useGeneratedKeys="true" keyProperty="housesetdetailId">
+		insert into t_warehousesetdetail
+		(
+			`warehouse_id`, 
+			`commodity_id`, 
+			`outputNum`, 
+			`input_id`, 
+			`output_id`, 
+			`intput_date`, 
+			`output_date`, 
+			`deposit_days`, 
+			`basicRent_id`, 
+			`raiseRent_id`, 
+			`Settlement_status`, 
+			`price`, 
+			`total_money`, 
+			`loadingCost`, 
+			`remark`
+		)
+		values
+		(
+			#{warehouseId}, 
+			#{commodityId}, 
+			#{outputnum}, 
+			#{inputId}, 
+			#{outputId}, 
+			#{intputDate}, 
+			#{outputDate}, 
+			#{depositDays}, 
+			#{basicrentId}, 
+			#{raiserentId}, 
+			#{settlementStatus}, 
+			#{price}, 
+			#{totalMoney}, 
+			#{loadingcost}, 
+			#{remark}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="xin.cymall.entity.Warehousesetdetail">
+		update t_warehousesetdetail 
+		<set>
+			<if test="warehouseId != null">`warehouse_id` = #{warehouseId}, </if>
+			<if test="commodityId != null">`commodity_id` = #{commodityId}, </if>
+			<if test="outputnum != null">`outputNum` = #{outputnum}, </if>
+			<if test="inputId != null">`input_id` = #{inputId}, </if>
+			<if test="outputId != null">`output_id` = #{outputId}, </if>
+			<if test="intputDate != null">`intput_date` = #{intputDate}, </if>
+			<if test="outputDate != null">`output_date` = #{outputDate}, </if>
+			<if test="depositDays != null">`deposit_days` = #{depositDays}, </if>
+			<if test="basicrentId != null">`basicRent_id` = #{basicrentId}, </if>
+			<if test="raiserentId != null">`raiseRent_id` = #{raiserentId}, </if>
+			<if test="settlementStatus != null">`Settlement_status` = #{settlementStatus}, </if>
+			<if test="price != null">`price` = #{price}, </if>
+			<if test="totalMoney != null">`total_money` = #{totalMoney}, </if>
+			<if test="loadingcost != null">`loadingCost` = #{loadingcost}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where houseSetDetail_id = #{housesetdetailId}
+	</update>
+	
+	<delete id="delete">
+		delete from t_warehousesetdetail where houseSetDetail_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from t_warehousesetdetail where houseSetDetail_id in 
+		<foreach item="housesetdetailId" collection="array" open="(" separator="," close=")">
+			#{housesetdetailId}
+		</foreach>
+	</delete>
+
+</mapper>

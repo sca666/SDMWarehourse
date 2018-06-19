@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xin.cymall.dao.OutputmainDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="xin.cymall.entity.Outputmain" id="outputmainMap">
+        <result property="outputmainId" column="outputMain_id"/>
+        <result property="companyId" column="company_id"/>
+        <result property="outputmainRef" column="outputMain_ref"/>
+        <result property="warehouseId" column="warehouse_id"/>
+        <result property="inputDate" column="input_date"/>
+        <result property="bill-status" column="bill-status"/>
+        <result property="userId" column="user_id"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="get" resultType="xin.cymall.entity.Outputmain">
+		select * from t_outputmain where outputMain_id = #{value}
+	</select>
+
+	<select id="getList" resultType="xin.cymall.entity.Outputmain">
+		select * from t_outputmain t <include refid="where_clause" />
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by outputMain_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="getCount" resultType="int">
+		select count(*) from t_outputmain t  <include refid="where_clause" />
+	</select>
+
+    <!-- 搜索数据区域 -->
+    <sql id="where_clause">
+        <where>
+            1=1
+            <if test="outputmainId != null and outputmainId != ''"> and t.outputMain_id = #{outputmainId} </if>
+    		<if test="outputmainIdVague != null and outputmainIdVague != ''"> and t.outputMain_id like concat('%',#{outputmainIdVague},'%') </if>
+            <if test="companyId != null and companyId != ''"> and t.company_id = #{companyId} </if>
+    		<if test="companyIdVague != null and companyIdVague != ''"> and t.company_id like concat('%',#{companyIdVague},'%') </if>
+            <if test="outputmainRef != null and outputmainRef != ''"> and t.outputMain_ref = #{outputmainRef} </if>
+    		<if test="outputmainRefVague != null and outputmainRefVague != ''"> and t.outputMain_ref like concat('%',#{outputmainRefVague},'%') </if>
+            <if test="warehouseId != null and warehouseId != ''"> and t.warehouse_id = #{warehouseId} </if>
+    		<if test="warehouseIdVague != null and warehouseIdVague != ''"> and t.warehouse_id like concat('%',#{warehouseIdVague},'%') </if>
+            <if test="inputDate != null and inputDate != ''"> and t.input_date = #{inputDate} </if>
+    		<if test="inputDateVague != null and inputDateVague != ''"> and t.input_date like concat('%',#{inputDateVague},'%') </if>
+            <if test="bill-status != null and bill-status != ''"> and t.bill-status = #{bill-status} </if>
+    		<if test="bill-statusVague != null and bill-statusVague != ''"> and t.bill-status like concat('%',#{bill-statusVague},'%') </if>
+            <if test="userId != null and userId != ''"> and t.user_id = #{userId} </if>
+    		<if test="userIdVague != null and userIdVague != ''"> and t.user_id like concat('%',#{userIdVague},'%') </if>
+            <if test="remark != null and remark != ''"> and t.remark = #{remark} </if>
+    		<if test="remarkVague != null and remarkVague != ''"> and t.remark like concat('%',#{remarkVague},'%') </if>
+        </where>
+    </sql>
+	 
+	<insert id="save" parameterType="xin.cymall.entity.Outputmain" useGeneratedKeys="true" keyProperty="outputmainId">
+		insert into t_outputmain
+		(
+			`company_id`, 
+			`outputMain_ref`, 
+			`warehouse_id`, 
+			`input_date`, 
+			`bill-status`, 
+			`user_id`, 
+			`remark`
+		)
+		values
+		(
+			#{companyId}, 
+			#{outputmainRef}, 
+			#{warehouseId}, 
+			#{inputDate}, 
+			#{bill-status}, 
+			#{userId}, 
+			#{remark}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="xin.cymall.entity.Outputmain">
+		update t_outputmain 
+		<set>
+			<if test="companyId != null">`company_id` = #{companyId}, </if>
+			<if test="outputmainRef != null">`outputMain_ref` = #{outputmainRef}, </if>
+			<if test="warehouseId != null">`warehouse_id` = #{warehouseId}, </if>
+			<if test="inputDate != null">`input_date` = #{inputDate}, </if>
+			<if test="bill-status != null">`bill-status` = #{bill-status}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where outputMain_id = #{outputmainId}
+	</update>
+	
+	<delete id="delete">
+		delete from t_outputmain where outputMain_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from t_outputmain where outputMain_id in 
+		<foreach item="outputmainId" collection="array" open="(" separator="," close=")">
+			#{outputmainId}
+		</foreach>
+	</delete>
+
+</mapper>

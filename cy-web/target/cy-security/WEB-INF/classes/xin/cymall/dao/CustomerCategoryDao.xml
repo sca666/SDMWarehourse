@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xin.cymall.dao.CustomerCategoryDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="xin.cymall.entity.CustomerCategory" id="customerCategoryMap">
+        <result property="id" column="id"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="companyId" column="company_id"/>
+        <result property="psId" column="ps_id"/>
+    </resultMap>
+
+	<select id="get" resultType="xin.cymall.entity.CustomerCategory">
+		select * from t_customer_category where id = #{value}
+	</select>
+
+	<select id="getList" resultType="xin.cymall.entity.CustomerCategory">
+		select * from t_customer_category t <include refid="where_clause" />
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="getCount" resultType="int">
+		select count(*) from t_customer_category t  <include refid="where_clause" />
+	</select>
+
+	<select id="getCustomerCategpryList" resultType="xin.cymall.entity.CustomerCategory">
+		SELECT  * FROM t_customer_category
+	</select>
+    <!-- 搜索数据区域 -->
+    <sql id="where_clause">
+        <where>
+            1=1
+            <if test="id != null and id != ''"> and t.id = #{id} </if>
+    		<if test="idVague != null and idVague != ''"> and t.id like concat('%',#{idVague},'%') </if>
+            <if test="code != null and code != ''"> and t.code = #{code} </if>
+    		<if test="codeVague != null and codeVague != ''"> and t.code like concat('%',#{codeVague},'%') </if>
+            <if test="name != null and name != ''"> and t.name = #{name} </if>
+    		<if test="nameVague != null and nameVague != ''"> and t.name like concat('%',#{nameVague},'%') </if>
+            <if test="parentId != null and parentId != ''"> and t.parent_id = #{parentId} </if>
+    		<if test="parentIdVague != null and parentIdVague != ''"> and t.parent_id like concat('%',#{parentIdVague},'%') </if>
+            <if test="companyId != null and companyId != ''"> and t.company_id = #{companyId} </if>
+    		<if test="companyIdVague != null and companyIdVague != ''"> and t.company_id like concat('%',#{companyIdVague},'%') </if>
+            <if test="psId != null and psId != ''"> and t.ps_id = #{psId} </if>
+    		<if test="psIdVague != null and psIdVague != ''"> and t.ps_id like concat('%',#{psIdVague},'%') </if>
+        </where>
+    </sql>
+	 
+	<insert id="save" parameterType="xin.cymall.entity.CustomerCategory">
+		insert into t_customer_category
+		(
+			`id`, 
+			`code`, 
+			`name`, 
+			`parent_id`, 
+			`company_id`, 
+			`ps_id`
+		)
+		values
+		(
+			#{id}, 
+			#{code}, 
+			#{name}, 
+			#{parentId}, 
+			#{companyId}, 
+			#{psId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="xin.cymall.entity.CustomerCategory">
+		update t_customer_category 
+		<set>
+			<if test="code != null">`code` = #{code}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="parentId != null">`parent_id` = #{parentId}, </if>
+			<if test="companyId != null">`company_id` = #{companyId}, </if>
+			<if test="psId != null">`ps_id` = #{psId}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from t_customer_category where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from t_customer_category where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

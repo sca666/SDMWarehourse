@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xin.cymall.dao.WarehouseDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="xin.cymall.entity.Warehouse" id="warehouseMap">
+        <result property="warehouseId" column="warehouse_id"/>
+        <result property="warehousrname" column="warehousrName"/>
+        <result property="address" column="address"/>
+        <result property="telephone" column="telephone"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="get" resultType="xin.cymall.entity.Warehouse">
+		select * from t_warehouse where warehouse_id = #{value}
+	</select>
+
+	<select id="getList" resultType="xin.cymall.entity.Warehouse">
+		select * from t_warehouse t <include refid="where_clause" />
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by warehouse_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="getCount" resultType="int">
+		select count(*) from t_warehouse t  <include refid="where_clause" />
+	</select>
+
+    <!-- 搜索数据区域 -->
+    <sql id="where_clause">
+        <where>
+            1=1
+            <if test="warehouseId != null and warehouseId != ''"> and t.warehouse_id = #{warehouseId} </if>
+    		<if test="warehouseIdVague != null and warehouseIdVague != ''"> and t.warehouse_id like concat('%',#{warehouseIdVague},'%') </if>
+            <if test="warehousrname != null and warehousrname != ''"> and t.warehousrName = #{warehousrname} </if>
+    		<if test="warehousrnameVague != null and warehousrnameVague != ''"> and t.warehousrName like concat('%',#{warehousrnameVague},'%') </if>
+            <if test="address != null and address != ''"> and t.address = #{address} </if>
+    		<if test="addressVague != null and addressVague != ''"> and t.address like concat('%',#{addressVague},'%') </if>
+            <if test="telephone != null and telephone != ''"> and t.telephone = #{telephone} </if>
+    		<if test="telephoneVague != null and telephoneVague != ''"> and t.telephone like concat('%',#{telephoneVague},'%') </if>
+            <if test="remark != null and remark != ''"> and t.remark = #{remark} </if>
+    		<if test="remarkVague != null and remarkVague != ''"> and t.remark like concat('%',#{remarkVague},'%') </if>
+        </where>
+    </sql>
+	 
+	<insert id="save" parameterType="xin.cymall.entity.Warehouse" useGeneratedKeys="true" keyProperty="warehouseId">
+		insert into t_warehouse
+		(
+			`warehousrName`, 
+			`address`, 
+			`telephone`, 
+			`remark`
+		)
+		values
+		(
+			#{warehousrname}, 
+			#{address}, 
+			#{telephone}, 
+			#{remark}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="xin.cymall.entity.Warehouse">
+		update t_warehouse 
+		<set>
+			<if test="warehousrname != null">`warehousrName` = #{warehousrname}, </if>
+			<if test="address != null">`address` = #{address}, </if>
+			<if test="telephone != null">`telephone` = #{telephone}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where warehouse_id = #{warehouseId}
+	</update>
+	
+	<delete id="delete">
+		delete from t_warehouse where warehouse_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from t_warehouse where warehouse_id in 
+		<foreach item="warehouseId" collection="array" open="(" separator="," close=")">
+			#{warehouseId}
+		</foreach>
+	</delete>
+
+</mapper>

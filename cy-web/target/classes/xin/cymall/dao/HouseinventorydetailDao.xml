@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xin.cymall.dao.HouseinventorydetailDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="xin.cymall.entity.Houseinventorydetail" id="houseinventorydetailMap">
+        <result property="houseinvendId" column="houseInvenD_id"/>
+        <result property="houseinvenmId" column="houseInvenM_id"/>
+        <result property="commodity" column="commodity"/>
+        <result property="basicrentId" column="basicRent_id"/>
+        <result property="paymenttype" column="paymentType"/>
+        <result property="warehouseId" column="warehouse_id"/>
+        <result property="intputId" column="intput_id"/>
+        <result property="outtputId" column="outtput_id"/>
+        <result property="inputnum" column="inputNum"/>
+        <result property="outputnum" column="outputNum"/>
+        <result property="balancenum" column="balanceNum"/>
+        <result property="inputDate" column="input_date"/>
+        <result property="userId" column="user_id"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="get" resultType="xin.cymall.entity.Houseinventorydetail">
+		select * from t_houseinventorydetail where houseInvenD_id = #{value}
+	</select>
+
+	<select id="getList" resultType="xin.cymall.entity.Houseinventorydetail">
+		select * from t_houseinventorydetail t <include refid="where_clause" />
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by houseInvenD_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="getCount" resultType="int">
+		select count(*) from t_houseinventorydetail t  <include refid="where_clause" />
+	</select>
+
+    <!-- 搜索数据区域 -->
+    <sql id="where_clause">
+        <where>
+            1=1
+            <if test="houseinvendId != null and houseinvendId != ''"> and t.houseInvenD_id = #{houseinvendId} </if>
+    		<if test="houseinvendIdVague != null and houseinvendIdVague != ''"> and t.houseInvenD_id like concat('%',#{houseinvendIdVague},'%') </if>
+            <if test="houseinvenmId != null and houseinvenmId != ''"> and t.houseInvenM_id = #{houseinvenmId} </if>
+    		<if test="houseinvenmIdVague != null and houseinvenmIdVague != ''"> and t.houseInvenM_id like concat('%',#{houseinvenmIdVague},'%') </if>
+            <if test="commodity != null and commodity != ''"> and t.commodity = #{commodity} </if>
+    		<if test="commodityVague != null and commodityVague != ''"> and t.commodity like concat('%',#{commodityVague},'%') </if>
+            <if test="basicrentId != null and basicrentId != ''"> and t.basicRent_id = #{basicrentId} </if>
+    		<if test="basicrentIdVague != null and basicrentIdVague != ''"> and t.basicRent_id like concat('%',#{basicrentIdVague},'%') </if>
+            <if test="paymenttype != null and paymenttype != ''"> and t.paymentType = #{paymenttype} </if>
+    		<if test="paymenttypeVague != null and paymenttypeVague != ''"> and t.paymentType like concat('%',#{paymenttypeVague},'%') </if>
+            <if test="warehouseId != null and warehouseId != ''"> and t.warehouse_id = #{warehouseId} </if>
+    		<if test="warehouseIdVague != null and warehouseIdVague != ''"> and t.warehouse_id like concat('%',#{warehouseIdVague},'%') </if>
+            <if test="intputId != null and intputId != ''"> and t.intput_id = #{intputId} </if>
+    		<if test="intputIdVague != null and intputIdVague != ''"> and t.intput_id like concat('%',#{intputIdVague},'%') </if>
+            <if test="outtputId != null and outtputId != ''"> and t.outtput_id = #{outtputId} </if>
+    		<if test="outtputIdVague != null and outtputIdVague != ''"> and t.outtput_id like concat('%',#{outtputIdVague},'%') </if>
+            <if test="inputnum != null and inputnum != ''"> and t.inputNum = #{inputnum} </if>
+    		<if test="inputnumVague != null and inputnumVague != ''"> and t.inputNum like concat('%',#{inputnumVague},'%') </if>
+            <if test="outputnum != null and outputnum != ''"> and t.outputNum = #{outputnum} </if>
+    		<if test="outputnumVague != null and outputnumVague != ''"> and t.outputNum like concat('%',#{outputnumVague},'%') </if>
+            <if test="balancenum != null and balancenum != ''"> and t.balanceNum = #{balancenum} </if>
+    		<if test="balancenumVague != null and balancenumVague != ''"> and t.balanceNum like concat('%',#{balancenumVague},'%') </if>
+            <if test="inputDate != null and inputDate != ''"> and t.input_date = #{inputDate} </if>
+    		<if test="inputDateVague != null and inputDateVague != ''"> and t.input_date like concat('%',#{inputDateVague},'%') </if>
+            <if test="userId != null and userId != ''"> and t.user_id = #{userId} </if>
+    		<if test="userIdVague != null and userIdVague != ''"> and t.user_id like concat('%',#{userIdVague},'%') </if>
+            <if test="remark != null and remark != ''"> and t.remark = #{remark} </if>
+    		<if test="remarkVague != null and remarkVague != ''"> and t.remark like concat('%',#{remarkVague},'%') </if>
+        </where>
+    </sql>
+	 
+	<insert id="save" parameterType="xin.cymall.entity.Houseinventorydetail" useGeneratedKeys="true" keyProperty="houseinvendId">
+		insert into t_houseinventorydetail
+		(
+			`houseInvenM_id`, 
+			`commodity`, 
+			`basicRent_id`, 
+			`paymentType`, 
+			`warehouse_id`, 
+			`intput_id`, 
+			`outtput_id`, 
+			`inputNum`, 
+			`outputNum`, 
+			`balanceNum`, 
+			`input_date`, 
+			`user_id`, 
+			`remark`
+		)
+		values
+		(
+			#{houseinvenmId}, 
+			#{commodity}, 
+			#{basicrentId}, 
+			#{paymenttype}, 
+			#{warehouseId}, 
+			#{intputId}, 
+			#{outtputId}, 
+			#{inputnum}, 
+			#{outputnum}, 
+			#{balancenum}, 
+			#{inputDate}, 
+			#{userId}, 
+			#{remark}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="xin.cymall.entity.Houseinventorydetail">
+		update t_houseinventorydetail 
+		<set>
+			<if test="houseinvenmId != null">`houseInvenM_id` = #{houseinvenmId}, </if>
+			<if test="commodity != null">`commodity` = #{commodity}, </if>
+			<if test="basicrentId != null">`basicRent_id` = #{basicrentId}, </if>
+			<if test="paymenttype != null">`paymentType` = #{paymenttype}, </if>
+			<if test="warehouseId != null">`warehouse_id` = #{warehouseId}, </if>
+			<if test="intputId != null">`intput_id` = #{intputId}, </if>
+			<if test="outtputId != null">`outtput_id` = #{outtputId}, </if>
+			<if test="inputnum != null">`inputNum` = #{inputnum}, </if>
+			<if test="outputnum != null">`outputNum` = #{outputnum}, </if>
+			<if test="balancenum != null">`balanceNum` = #{balancenum}, </if>
+			<if test="inputDate != null">`input_date` = #{inputDate}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where houseInvenD_id = #{houseinvendId}
+	</update>
+	
+	<delete id="delete">
+		delete from t_houseinventorydetail where houseInvenD_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from t_houseinventorydetail where houseInvenD_id in 
+		<foreach item="houseinvendId" collection="array" open="(" separator="," close=")">
+			#{houseinvendId}
+		</foreach>
+	</delete>
+
+</mapper>

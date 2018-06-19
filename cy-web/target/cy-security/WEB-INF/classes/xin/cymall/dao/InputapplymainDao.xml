@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xin.cymall.dao.InputapplymainDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="xin.cymall.entity.Inputapplymain" id="inputapplymainMap">
+        <result property="inputapplymainId" column="inputApplyMain_id"/>
+        <result property="inputapplymainRef" column="inputApplyMain_ref"/>
+        <result property="companyId" column="company_id"/>
+        <result property="inputUserId" column="input_user_id"/>
+        <result property="inputDate" column="input_date"/>
+        <result property="billStatus" column="bill_status"/>
+        <result property="confirmUserId" column="confirm_user_id"/>
+        <result property="confirmDate" column="confirm_date"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="get" resultType="xin.cymall.entity.Inputapplymain">
+		select * from t_inputapplymain where inputApplyMain_id = #{value}
+	</select>
+
+	<select id="getList" resultType="xin.cymall.entity.Inputapplymain">
+		select * from t_inputapplymain t <include refid="where_clause" />
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by inputApplyMain_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="getCount" resultType="int">
+		select count(*) from t_inputapplymain t  <include refid="where_clause" />
+	</select>
+
+    <!-- 搜索数据区域 -->
+    <sql id="where_clause">
+        <where>
+            1=1
+            <if test="inputapplymainId != null and inputapplymainId != ''"> and t.inputApplyMain_id = #{inputapplymainId} </if>
+    		<if test="inputapplymainIdVague != null and inputapplymainIdVague != ''"> and t.inputApplyMain_id like concat('%',#{inputapplymainIdVague},'%') </if>
+            <if test="inputapplymainRef != null and inputapplymainRef != ''"> and t.inputApplyMain_ref = #{inputapplymainRef} </if>
+    		<if test="inputapplymainRefVague != null and inputapplymainRefVague != ''"> and t.inputApplyMain_ref like concat('%',#{inputapplymainRefVague},'%') </if>
+            <if test="companyId != null and companyId != ''"> and t.company_id = #{companyId} </if>
+    		<if test="companyIdVague != null and companyIdVague != ''"> and t.company_id like concat('%',#{companyIdVague},'%') </if>
+            <if test="inputUserId != null and inputUserId != ''"> and t.input_user_id = #{inputUserId} </if>
+    		<if test="inputUserIdVague != null and inputUserIdVague != ''"> and t.input_user_id like concat('%',#{inputUserIdVague},'%') </if>
+            <if test="inputDate != null and inputDate != ''"> and t.input_date = #{inputDate} </if>
+    		<if test="inputDateVague != null and inputDateVague != ''"> and t.input_date like concat('%',#{inputDateVague},'%') </if>
+            <if test="billStatus != null and billStatus != ''"> and t.bill_status = #{billStatus} </if>
+    		<if test="billStatusVague != null and billStatusVague != ''"> and t.bill_status like concat('%',#{billStatusVague},'%') </if>
+            <if test="confirmUserId != null and confirmUserId != ''"> and t.confirm_user_id = #{confirmUserId} </if>
+    		<if test="confirmUserIdVague != null and confirmUserIdVague != ''"> and t.confirm_user_id like concat('%',#{confirmUserIdVague},'%') </if>
+            <if test="confirmDate != null and confirmDate != ''"> and t.confirm_date = #{confirmDate} </if>
+    		<if test="confirmDateVague != null and confirmDateVague != ''"> and t.confirm_date like concat('%',#{confirmDateVague},'%') </if>
+            <if test="remark != null and remark != ''"> and t.remark = #{remark} </if>
+    		<if test="remarkVague != null and remarkVague != ''"> and t.remark like concat('%',#{remarkVague},'%') </if>
+        </where>
+    </sql>
+	 
+	<insert id="save" parameterType="xin.cymall.entity.Inputapplymain" useGeneratedKeys="true" keyProperty="inputapplymainId">
+		insert into t_inputapplymain
+		(
+			`inputApplyMain_ref`, 
+			`company_id`, 
+			`input_user_id`, 
+			`input_date`, 
+			`bill_status`, 
+			`confirm_user_id`, 
+			`confirm_date`, 
+			`remark`
+		)
+		values
+		(
+			#{inputapplymainRef}, 
+			#{companyId}, 
+			#{inputUserId}, 
+			#{inputDate}, 
+			#{billStatus}, 
+			#{confirmUserId}, 
+			#{confirmDate}, 
+			#{remark}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="xin.cymall.entity.Inputapplymain">
+		update t_inputapplymain 
+		<set>
+			<if test="inputapplymainRef != null">`inputApplyMain_ref` = #{inputapplymainRef}, </if>
+			<if test="companyId != null">`company_id` = #{companyId}, </if>
+			<if test="inputUserId != null">`input_user_id` = #{inputUserId}, </if>
+			<if test="inputDate != null">`input_date` = #{inputDate}, </if>
+			<if test="billStatus != null">`bill_status` = #{billStatus}, </if>
+			<if test="confirmUserId != null">`confirm_user_id` = #{confirmUserId}, </if>
+			<if test="confirmDate != null">`confirm_date` = #{confirmDate}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where inputApplyMain_id = #{inputapplymainId}
+	</update>
+	
+	<delete id="delete">
+		delete from t_inputapplymain where inputApplyMain_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from t_inputapplymain where inputApplyMain_id in 
+		<foreach item="inputapplymainId" collection="array" open="(" separator="," close=")">
+			#{inputapplymainId}
+		</foreach>
+	</delete>
+
+</mapper>

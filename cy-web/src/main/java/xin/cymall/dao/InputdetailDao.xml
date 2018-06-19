@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xin.cymall.dao.InputdetailDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="xin.cymall.entity.Inputdetail" id="inputdetailMap">
+        <result property="inputdetailId" column="inputDetail_id"/>
+        <result property="inputmainId" column="inputMain_id"/>
+        <result property="companyId" column="company_id"/>
+        <result property="commodityId" column="commodity_id"/>
+        <result property="inputnum" column="InputNum"/>
+        <result property="inputDate" column="input_date"/>
+        <result property="basicrentId" column="basicRent_id"/>
+        <result property="raiserentId" column="raiseRent_id"/>
+        <result property="driverId" column="Driver_id"/>
+        <result property="carId" column="Car_id"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="get" resultType="xin.cymall.entity.Inputdetail">
+		select * from t_inputdetail where inputDetail_id = #{value}
+	</select>
+
+	<select id="getList" resultType="xin.cymall.entity.Inputdetail">
+		select * from t_inputdetail t <include refid="where_clause" />
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by inputDetail_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="getCount" resultType="int">
+		select count(*) from t_inputdetail t  <include refid="where_clause" />
+	</select>
+
+    <!-- 搜索数据区域 -->
+    <sql id="where_clause">
+        <where>
+            1=1
+            <if test="inputdetailId != null and inputdetailId != ''"> and t.inputDetail_id = #{inputdetailId} </if>
+    		<if test="inputdetailIdVague != null and inputdetailIdVague != ''"> and t.inputDetail_id like concat('%',#{inputdetailIdVague},'%') </if>
+            <if test="inputmainId != null and inputmainId != ''"> and t.inputMain_id = #{inputmainId} </if>
+    		<if test="inputmainIdVague != null and inputmainIdVague != ''"> and t.inputMain_id like concat('%',#{inputmainIdVague},'%') </if>
+            <if test="companyId != null and companyId != ''"> and t.company_id = #{companyId} </if>
+    		<if test="companyIdVague != null and companyIdVague != ''"> and t.company_id like concat('%',#{companyIdVague},'%') </if>
+            <if test="commodityId != null and commodityId != ''"> and t.commodity_id = #{commodityId} </if>
+    		<if test="commodityIdVague != null and commodityIdVague != ''"> and t.commodity_id like concat('%',#{commodityIdVague},'%') </if>
+            <if test="inputnum != null and inputnum != ''"> and t.InputNum = #{inputnum} </if>
+    		<if test="inputnumVague != null and inputnumVague != ''"> and t.InputNum like concat('%',#{inputnumVague},'%') </if>
+            <if test="inputDate != null and inputDate != ''"> and t.input_date = #{inputDate} </if>
+    		<if test="inputDateVague != null and inputDateVague != ''"> and t.input_date like concat('%',#{inputDateVague},'%') </if>
+            <if test="basicrentId != null and basicrentId != ''"> and t.basicRent_id = #{basicrentId} </if>
+    		<if test="basicrentIdVague != null and basicrentIdVague != ''"> and t.basicRent_id like concat('%',#{basicrentIdVague},'%') </if>
+            <if test="raiserentId != null and raiserentId != ''"> and t.raiseRent_id = #{raiserentId} </if>
+    		<if test="raiserentIdVague != null and raiserentIdVague != ''"> and t.raiseRent_id like concat('%',#{raiserentIdVague},'%') </if>
+            <if test="driverId != null and driverId != ''"> and t.Driver_id = #{driverId} </if>
+    		<if test="driverIdVague != null and driverIdVague != ''"> and t.Driver_id like concat('%',#{driverIdVague},'%') </if>
+            <if test="carId != null and carId != ''"> and t.Car_id = #{carId} </if>
+    		<if test="carIdVague != null and carIdVague != ''"> and t.Car_id like concat('%',#{carIdVague},'%') </if>
+            <if test="remark != null and remark != ''"> and t.remark = #{remark} </if>
+    		<if test="remarkVague != null and remarkVague != ''"> and t.remark like concat('%',#{remarkVague},'%') </if>
+        </where>
+    </sql>
+	 
+	<insert id="save" parameterType="xin.cymall.entity.Inputdetail" useGeneratedKeys="true" keyProperty="inputdetailId">
+		insert into t_inputdetail
+		(
+			`inputMain_id`, 
+			`company_id`, 
+			`commodity_id`, 
+			`InputNum`, 
+			`input_date`, 
+			`basicRent_id`, 
+			`raiseRent_id`, 
+			`Driver_id`, 
+			`Car_id`, 
+			`remark`
+		)
+		values
+		(
+			#{inputmainId}, 
+			#{companyId}, 
+			#{commodityId}, 
+			#{inputnum}, 
+			#{inputDate}, 
+			#{basicrentId}, 
+			#{raiserentId}, 
+			#{driverId}, 
+			#{carId}, 
+			#{remark}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="xin.cymall.entity.Inputdetail">
+		update t_inputdetail 
+		<set>
+			<if test="inputmainId != null">`inputMain_id` = #{inputmainId}, </if>
+			<if test="companyId != null">`company_id` = #{companyId}, </if>
+			<if test="commodityId != null">`commodity_id` = #{commodityId}, </if>
+			<if test="inputnum != null">`InputNum` = #{inputnum}, </if>
+			<if test="inputDate != null">`input_date` = #{inputDate}, </if>
+			<if test="basicrentId != null">`basicRent_id` = #{basicrentId}, </if>
+			<if test="raiserentId != null">`raiseRent_id` = #{raiserentId}, </if>
+			<if test="driverId != null">`Driver_id` = #{driverId}, </if>
+			<if test="carId != null">`Car_id` = #{carId}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where inputDetail_id = #{inputdetailId}
+	</update>
+	
+	<delete id="delete">
+		delete from t_inputdetail where inputDetail_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from t_inputdetail where inputDetail_id in 
+		<foreach item="inputdetailId" collection="array" open="(" separator="," close=")">
+			#{inputdetailId}
+		</foreach>
+	</delete>
+
+</mapper>

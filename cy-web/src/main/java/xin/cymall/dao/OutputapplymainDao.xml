@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xin.cymall.dao.OutputapplymainDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="xin.cymall.entity.Outputapplymain" id="outputapplymainMap">
+        <result property="outputapplymainId" column="outputApplyMain_id"/>
+        <result property="outputapplymainRef" column="outputApplyMain_ref"/>
+        <result property="companyId" column="company_id"/>
+        <result property="outputUserId" column="output_user_id"/>
+        <result property="outputDate" column="output_date"/>
+        <result property="billStatus" column="bill_status"/>
+        <result property="confirmUserId" column="confirm_user_id"/>
+        <result property="confirmDate" column="confirm_date"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="get" resultType="xin.cymall.entity.Outputapplymain">
+		select * from t_outputapplymain where outputApplyMain_id = #{value}
+	</select>
+
+	<select id="getList" resultType="xin.cymall.entity.Outputapplymain">
+		select * from t_outputapplymain t <include refid="where_clause" />
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by outputApplyMain_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="getCount" resultType="int">
+		select count(*) from t_outputapplymain t  <include refid="where_clause" />
+	</select>
+
+    <!-- 搜索数据区域 -->
+    <sql id="where_clause">
+        <where>
+            1=1
+            <if test="outputapplymainId != null and outputapplymainId != ''"> and t.outputApplyMain_id = #{outputapplymainId} </if>
+    		<if test="outputapplymainIdVague != null and outputapplymainIdVague != ''"> and t.outputApplyMain_id like concat('%',#{outputapplymainIdVague},'%') </if>
+            <if test="outputapplymainRef != null and outputapplymainRef != ''"> and t.outputApplyMain_ref = #{outputapplymainRef} </if>
+    		<if test="outputapplymainRefVague != null and outputapplymainRefVague != ''"> and t.outputApplyMain_ref like concat('%',#{outputapplymainRefVague},'%') </if>
+            <if test="companyId != null and companyId != ''"> and t.company_id = #{companyId} </if>
+    		<if test="companyIdVague != null and companyIdVague != ''"> and t.company_id like concat('%',#{companyIdVague},'%') </if>
+            <if test="outputUserId != null and outputUserId != ''"> and t.output_user_id = #{outputUserId} </if>
+    		<if test="outputUserIdVague != null and outputUserIdVague != ''"> and t.output_user_id like concat('%',#{outputUserIdVague},'%') </if>
+            <if test="outputDate != null and outputDate != ''"> and t.output_date = #{outputDate} </if>
+    		<if test="outputDateVague != null and outputDateVague != ''"> and t.output_date like concat('%',#{outputDateVague},'%') </if>
+            <if test="billStatus != null and billStatus != ''"> and t.bill_status = #{billStatus} </if>
+    		<if test="billStatusVague != null and billStatusVague != ''"> and t.bill_status like concat('%',#{billStatusVague},'%') </if>
+            <if test="confirmUserId != null and confirmUserId != ''"> and t.confirm_user_id = #{confirmUserId} </if>
+    		<if test="confirmUserIdVague != null and confirmUserIdVague != ''"> and t.confirm_user_id like concat('%',#{confirmUserIdVague},'%') </if>
+            <if test="confirmDate != null and confirmDate != ''"> and t.confirm_date = #{confirmDate} </if>
+    		<if test="confirmDateVague != null and confirmDateVague != ''"> and t.confirm_date like concat('%',#{confirmDateVague},'%') </if>
+            <if test="remark != null and remark != ''"> and t.remark = #{remark} </if>
+    		<if test="remarkVague != null and remarkVague != ''"> and t.remark like concat('%',#{remarkVague},'%') </if>
+        </where>
+    </sql>
+	 
+	<insert id="save" parameterType="xin.cymall.entity.Outputapplymain" useGeneratedKeys="true" keyProperty="outputapplymainId">
+		insert into t_outputapplymain
+		(
+			`outputApplyMain_ref`, 
+			`company_id`, 
+			`output_user_id`, 
+			`output_date`, 
+			`bill_status`, 
+			`confirm_user_id`, 
+			`confirm_date`, 
+			`remark`
+		)
+		values
+		(
+			#{outputapplymainRef}, 
+			#{companyId}, 
+			#{outputUserId}, 
+			#{outputDate}, 
+			#{billStatus}, 
+			#{confirmUserId}, 
+			#{confirmDate}, 
+			#{remark}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="xin.cymall.entity.Outputapplymain">
+		update t_outputapplymain 
+		<set>
+			<if test="outputapplymainRef != null">`outputApplyMain_ref` = #{outputapplymainRef}, </if>
+			<if test="companyId != null">`company_id` = #{companyId}, </if>
+			<if test="outputUserId != null">`output_user_id` = #{outputUserId}, </if>
+			<if test="outputDate != null">`output_date` = #{outputDate}, </if>
+			<if test="billStatus != null">`bill_status` = #{billStatus}, </if>
+			<if test="confirmUserId != null">`confirm_user_id` = #{confirmUserId}, </if>
+			<if test="confirmDate != null">`confirm_date` = #{confirmDate}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where outputApplyMain_id = #{outputapplymainId}
+	</update>
+	
+	<delete id="delete">
+		delete from t_outputapplymain where outputApplyMain_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from t_outputapplymain where outputApplyMain_id in 
+		<foreach item="outputapplymainId" collection="array" open="(" separator="," close=")">
+			#{outputapplymainId}
+		</foreach>
+	</delete>
+
+</mapper>

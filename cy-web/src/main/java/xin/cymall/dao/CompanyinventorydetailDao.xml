@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xin.cymall.dao.CompanyinventorydetailDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="xin.cymall.entity.Companyinventorydetail" id="companyinventorydetailMap">
+        <result property="cominvendId" column="comInvenD_id"/>
+        <result property="cominvenmId" column="comInvenM_id"/>
+        <result property="commodity" column="commodity"/>
+        <result property="companyId" column="company_id"/>
+        <result property="intputId" column="intput_id"/>
+        <result property="outputId" column="output_id"/>
+        <result property="basicrentId" column="basicRent_id"/>
+        <result property="paymenttype" column="paymentType"/>
+        <result property="inputnum" column="inputNum"/>
+        <result property="outputnum" column="outputNum"/>
+        <result property="balancenum" column="balanceNum"/>
+        <result property="inputDate" column="input_date"/>
+        <result property="userId" column="user_id"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="get" resultType="xin.cymall.entity.Companyinventorydetail">
+		select * from t_companyinventorydetail where comInvenD_id = #{value}
+	</select>
+
+	<select id="getList" resultType="xin.cymall.entity.Companyinventorydetail">
+		select * from t_companyinventorydetail t <include refid="where_clause" />
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by comInvenD_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="getCount" resultType="int">
+		select count(*) from t_companyinventorydetail t  <include refid="where_clause" />
+	</select>
+
+    <!-- 搜索数据区域 -->
+    <sql id="where_clause">
+        <where>
+            1=1
+            <if test="cominvendId != null and cominvendId != ''"> and t.comInvenD_id = #{cominvendId} </if>
+    		<if test="cominvendIdVague != null and cominvendIdVague != ''"> and t.comInvenD_id like concat('%',#{cominvendIdVague},'%') </if>
+            <if test="cominvenmId != null and cominvenmId != ''"> and t.comInvenM_id = #{cominvenmId} </if>
+    		<if test="cominvenmIdVague != null and cominvenmIdVague != ''"> and t.comInvenM_id like concat('%',#{cominvenmIdVague},'%') </if>
+            <if test="commodity != null and commodity != ''"> and t.commodity = #{commodity} </if>
+    		<if test="commodityVague != null and commodityVague != ''"> and t.commodity like concat('%',#{commodityVague},'%') </if>
+            <if test="companyId != null and companyId != ''"> and t.company_id = #{companyId} </if>
+    		<if test="companyIdVague != null and companyIdVague != ''"> and t.company_id like concat('%',#{companyIdVague},'%') </if>
+            <if test="intputId != null and intputId != ''"> and t.intput_id = #{intputId} </if>
+    		<if test="intputIdVague != null and intputIdVague != ''"> and t.intput_id like concat('%',#{intputIdVague},'%') </if>
+            <if test="outputId != null and outputId != ''"> and t.output_id = #{outputId} </if>
+    		<if test="outputIdVague != null and outputIdVague != ''"> and t.output_id like concat('%',#{outputIdVague},'%') </if>
+            <if test="basicrentId != null and basicrentId != ''"> and t.basicRent_id = #{basicrentId} </if>
+    		<if test="basicrentIdVague != null and basicrentIdVague != ''"> and t.basicRent_id like concat('%',#{basicrentIdVague},'%') </if>
+            <if test="paymenttype != null and paymenttype != ''"> and t.paymentType = #{paymenttype} </if>
+    		<if test="paymenttypeVague != null and paymenttypeVague != ''"> and t.paymentType like concat('%',#{paymenttypeVague},'%') </if>
+            <if test="inputnum != null and inputnum != ''"> and t.inputNum = #{inputnum} </if>
+    		<if test="inputnumVague != null and inputnumVague != ''"> and t.inputNum like concat('%',#{inputnumVague},'%') </if>
+            <if test="outputnum != null and outputnum != ''"> and t.outputNum = #{outputnum} </if>
+    		<if test="outputnumVague != null and outputnumVague != ''"> and t.outputNum like concat('%',#{outputnumVague},'%') </if>
+            <if test="balancenum != null and balancenum != ''"> and t.balanceNum = #{balancenum} </if>
+    		<if test="balancenumVague != null and balancenumVague != ''"> and t.balanceNum like concat('%',#{balancenumVague},'%') </if>
+            <if test="inputDate != null and inputDate != ''"> and t.input_date = #{inputDate} </if>
+    		<if test="inputDateVague != null and inputDateVague != ''"> and t.input_date like concat('%',#{inputDateVague},'%') </if>
+            <if test="userId != null and userId != ''"> and t.user_id = #{userId} </if>
+    		<if test="userIdVague != null and userIdVague != ''"> and t.user_id like concat('%',#{userIdVague},'%') </if>
+            <if test="remark != null and remark != ''"> and t.remark = #{remark} </if>
+    		<if test="remarkVague != null and remarkVague != ''"> and t.remark like concat('%',#{remarkVague},'%') </if>
+        </where>
+    </sql>
+	 
+	<insert id="save" parameterType="xin.cymall.entity.Companyinventorydetail" useGeneratedKeys="true" keyProperty="cominvendId">
+		insert into t_companyinventorydetail
+		(
+			`comInvenM_id`, 
+			`commodity`, 
+			`company_id`, 
+			`intput_id`, 
+			`output_id`, 
+			`basicRent_id`, 
+			`paymentType`, 
+			`inputNum`, 
+			`outputNum`, 
+			`balanceNum`, 
+			`input_date`, 
+			`user_id`, 
+			`remark`
+		)
+		values
+		(
+			#{cominvenmId}, 
+			#{commodity}, 
+			#{companyId}, 
+			#{intputId}, 
+			#{outputId}, 
+			#{basicrentId}, 
+			#{paymenttype}, 
+			#{inputnum}, 
+			#{outputnum}, 
+			#{balancenum}, 
+			#{inputDate}, 
+			#{userId}, 
+			#{remark}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="xin.cymall.entity.Companyinventorydetail">
+		update t_companyinventorydetail 
+		<set>
+			<if test="cominvenmId != null">`comInvenM_id` = #{cominvenmId}, </if>
+			<if test="commodity != null">`commodity` = #{commodity}, </if>
+			<if test="companyId != null">`company_id` = #{companyId}, </if>
+			<if test="intputId != null">`intput_id` = #{intputId}, </if>
+			<if test="outputId != null">`output_id` = #{outputId}, </if>
+			<if test="basicrentId != null">`basicRent_id` = #{basicrentId}, </if>
+			<if test="paymenttype != null">`paymentType` = #{paymenttype}, </if>
+			<if test="inputnum != null">`inputNum` = #{inputnum}, </if>
+			<if test="outputnum != null">`outputNum` = #{outputnum}, </if>
+			<if test="balancenum != null">`balanceNum` = #{balancenum}, </if>
+			<if test="inputDate != null">`input_date` = #{inputDate}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where comInvenD_id = #{cominvendId}
+	</update>
+	
+	<delete id="delete">
+		delete from t_companyinventorydetail where comInvenD_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from t_companyinventorydetail where comInvenD_id in 
+		<foreach item="cominvendId" collection="array" open="(" separator="," close=")">
+			#{cominvendId}
+		</foreach>
+	</delete>
+
+</mapper>

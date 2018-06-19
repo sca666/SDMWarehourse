@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xin.cymall.dao.CompanyinventorymainDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="xin.cymall.entity.Companyinventorymain" id="companyinventorymainMap">
+        <result property="cominvenmId" column="comInvenM_id"/>
+        <result property="commodity" column="commodity"/>
+        <result property="companyId" column="company_id"/>
+        <result property="inputnum" column="inputNum"/>
+        <result property="outputnum" column="outputNum"/>
+        <result property="balancenum" column="balanceNum"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="get" resultType="xin.cymall.entity.Companyinventorymain">
+		select * from t_companyinventorymain where comInvenM_id = #{value}
+	</select>
+
+	<select id="getList" resultType="xin.cymall.entity.Companyinventorymain">
+		select * from t_companyinventorymain t <include refid="where_clause" />
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by comInvenM_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="getCount" resultType="int">
+		select count(*) from t_companyinventorymain t  <include refid="where_clause" />
+	</select>
+
+    <!-- 搜索数据区域 -->
+    <sql id="where_clause">
+        <where>
+            1=1
+            <if test="cominvenmId != null and cominvenmId != ''"> and t.comInvenM_id = #{cominvenmId} </if>
+    		<if test="cominvenmIdVague != null and cominvenmIdVague != ''"> and t.comInvenM_id like concat('%',#{cominvenmIdVague},'%') </if>
+            <if test="commodity != null and commodity != ''"> and t.commodity = #{commodity} </if>
+    		<if test="commodityVague != null and commodityVague != ''"> and t.commodity like concat('%',#{commodityVague},'%') </if>
+            <if test="companyId != null and companyId != ''"> and t.company_id = #{companyId} </if>
+    		<if test="companyIdVague != null and companyIdVague != ''"> and t.company_id like concat('%',#{companyIdVague},'%') </if>
+            <if test="inputnum != null and inputnum != ''"> and t.inputNum = #{inputnum} </if>
+    		<if test="inputnumVague != null and inputnumVague != ''"> and t.inputNum like concat('%',#{inputnumVague},'%') </if>
+            <if test="outputnum != null and outputnum != ''"> and t.outputNum = #{outputnum} </if>
+    		<if test="outputnumVague != null and outputnumVague != ''"> and t.outputNum like concat('%',#{outputnumVague},'%') </if>
+            <if test="balancenum != null and balancenum != ''"> and t.balanceNum = #{balancenum} </if>
+    		<if test="balancenumVague != null and balancenumVague != ''"> and t.balanceNum like concat('%',#{balancenumVague},'%') </if>
+            <if test="remark != null and remark != ''"> and t.remark = #{remark} </if>
+    		<if test="remarkVague != null and remarkVague != ''"> and t.remark like concat('%',#{remarkVague},'%') </if>
+        </where>
+    </sql>
+	 
+	<insert id="save" parameterType="xin.cymall.entity.Companyinventorymain" useGeneratedKeys="true" keyProperty="cominvenmId">
+		insert into t_companyinventorymain
+		(
+			`commodity`, 
+			`company_id`, 
+			`inputNum`, 
+			`outputNum`, 
+			`balanceNum`, 
+			`remark`
+		)
+		values
+		(
+			#{commodity}, 
+			#{companyId}, 
+			#{inputnum}, 
+			#{outputnum}, 
+			#{balancenum}, 
+			#{remark}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="xin.cymall.entity.Companyinventorymain">
+		update t_companyinventorymain 
+		<set>
+			<if test="commodity != null">`commodity` = #{commodity}, </if>
+			<if test="companyId != null">`company_id` = #{companyId}, </if>
+			<if test="inputnum != null">`inputNum` = #{inputnum}, </if>
+			<if test="outputnum != null">`outputNum` = #{outputnum}, </if>
+			<if test="balancenum != null">`balanceNum` = #{balancenum}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where comInvenM_id = #{cominvenmId}
+	</update>
+	
+	<delete id="delete">
+		delete from t_companyinventorymain where comInvenM_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from t_companyinventorymain where comInvenM_id in 
+		<foreach item="cominvenmId" collection="array" open="(" separator="," close=")">
+			#{cominvenmId}
+		</foreach>
+	</delete>
+
+</mapper>

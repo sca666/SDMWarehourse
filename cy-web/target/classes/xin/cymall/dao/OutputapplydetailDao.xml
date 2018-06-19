@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xin.cymall.dao.OutputapplydetailDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="xin.cymall.entity.Outputapplydetail" id="outputapplydetailMap">
+        <result property="outputapplydetailId" column="outputApplyDetail_id"/>
+        <result property="outputapplymainId" column="outputApplyMain_id"/>
+        <result property="commodityId" column="commodity_id"/>
+        <result property="planoutputnum" column="planOutputNum"/>
+        <result property="actualoutputnum`actualinputnum" column="actualOutputNum`actualInputNum"/>
+        <result property="allocaoutputnum" column="allocaOutputNum"/>
+        <result property="notoutputnum" column="notOutputNum"/>
+        <result property="unitId" column="unit_id"/>
+        <result property="outputDate" column="output_date"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="get" resultType="xin.cymall.entity.Outputapplydetail">
+		select * from t_outputapplydetail where outputApplyDetail_id = #{value}
+	</select>
+
+	<select id="getList" resultType="xin.cymall.entity.Outputapplydetail">
+		select * from t_outputapplydetail t <include refid="where_clause" />
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by outputApplyDetail_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="getCount" resultType="int">
+		select count(*) from t_outputapplydetail t  <include refid="where_clause" />
+	</select>
+
+    <!-- 搜索数据区域 -->
+    <sql id="where_clause">
+        <where>
+            1=1
+            <if test="outputapplydetailId != null and outputapplydetailId != ''"> and t.outputApplyDetail_id = #{outputapplydetailId} </if>
+    		<if test="outputapplydetailIdVague != null and outputapplydetailIdVague != ''"> and t.outputApplyDetail_id like concat('%',#{outputapplydetailIdVague},'%') </if>
+            <if test="outputapplymainId != null and outputapplymainId != ''"> and t.outputApplyMain_id = #{outputapplymainId} </if>
+    		<if test="outputapplymainIdVague != null and outputapplymainIdVague != ''"> and t.outputApplyMain_id like concat('%',#{outputapplymainIdVague},'%') </if>
+            <if test="commodityId != null and commodityId != ''"> and t.commodity_id = #{commodityId} </if>
+    		<if test="commodityIdVague != null and commodityIdVague != ''"> and t.commodity_id like concat('%',#{commodityIdVague},'%') </if>
+            <if test="planoutputnum != null and planoutputnum != ''"> and t.planOutputNum = #{planoutputnum} </if>
+    		<if test="planoutputnumVague != null and planoutputnumVague != ''"> and t.planOutputNum like concat('%',#{planoutputnumVague},'%') </if>
+            <if test="actualoutputnum`actualinputnum != null and actualoutputnum`actualinputnum != ''"> and t.actualOutputNum`actualInputNum = #{actualoutputnum`actualinputnum} </if>
+    		<if test="actualoutputnum`actualinputnumVague != null and actualoutputnum`actualinputnumVague != ''"> and t.actualOutputNum`actualInputNum like concat('%',#{actualoutputnum`actualinputnumVague},'%') </if>
+            <if test="allocaoutputnum != null and allocaoutputnum != ''"> and t.allocaOutputNum = #{allocaoutputnum} </if>
+    		<if test="allocaoutputnumVague != null and allocaoutputnumVague != ''"> and t.allocaOutputNum like concat('%',#{allocaoutputnumVague},'%') </if>
+            <if test="notoutputnum != null and notoutputnum != ''"> and t.notOutputNum = #{notoutputnum} </if>
+    		<if test="notoutputnumVague != null and notoutputnumVague != ''"> and t.notOutputNum like concat('%',#{notoutputnumVague},'%') </if>
+            <if test="unitId != null and unitId != ''"> and t.unit_id = #{unitId} </if>
+    		<if test="unitIdVague != null and unitIdVague != ''"> and t.unit_id like concat('%',#{unitIdVague},'%') </if>
+            <if test="outputDate != null and outputDate != ''"> and t.output_date = #{outputDate} </if>
+    		<if test="outputDateVague != null and outputDateVague != ''"> and t.output_date like concat('%',#{outputDateVague},'%') </if>
+            <if test="remark != null and remark != ''"> and t.remark = #{remark} </if>
+    		<if test="remarkVague != null and remarkVague != ''"> and t.remark like concat('%',#{remarkVague},'%') </if>
+        </where>
+    </sql>
+	 
+	<insert id="save" parameterType="xin.cymall.entity.Outputapplydetail" useGeneratedKeys="true" keyProperty="outputapplydetailId">
+		insert into t_outputapplydetail
+		(
+			`outputApplyMain_id`, 
+			`commodity_id`, 
+			`planOutputNum`, 
+			`actualOutputNum`actualInputNum`, 
+			`allocaOutputNum`, 
+			`notOutputNum`, 
+			`unit_id`, 
+			`output_date`, 
+			`remark`
+		)
+		values
+		(
+			#{outputapplymainId}, 
+			#{commodityId}, 
+			#{planoutputnum}, 
+			#{actualoutputnum`actualinputnum}, 
+			#{allocaoutputnum}, 
+			#{notoutputnum}, 
+			#{unitId}, 
+			#{outputDate}, 
+			#{remark}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="xin.cymall.entity.Outputapplydetail">
+		update t_outputapplydetail 
+		<set>
+			<if test="outputapplymainId != null">`outputApplyMain_id` = #{outputapplymainId}, </if>
+			<if test="commodityId != null">`commodity_id` = #{commodityId}, </if>
+			<if test="planoutputnum != null">`planOutputNum` = #{planoutputnum}, </if>
+			<if test="actualoutputnum`actualinputnum != null">`actualOutputNum`actualInputNum` = #{actualoutputnum`actualinputnum}, </if>
+			<if test="allocaoutputnum != null">`allocaOutputNum` = #{allocaoutputnum}, </if>
+			<if test="notoutputnum != null">`notOutputNum` = #{notoutputnum}, </if>
+			<if test="unitId != null">`unit_id` = #{unitId}, </if>
+			<if test="outputDate != null">`output_date` = #{outputDate}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where outputApplyDetail_id = #{outputapplydetailId}
+	</update>
+	
+	<delete id="delete">
+		delete from t_outputapplydetail where outputApplyDetail_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from t_outputapplydetail where outputApplyDetail_id in 
+		<foreach item="outputapplydetailId" collection="array" open="(" separator="," close=")">
+			#{outputapplydetailId}
+		</foreach>
+	</delete>
+
+</mapper>

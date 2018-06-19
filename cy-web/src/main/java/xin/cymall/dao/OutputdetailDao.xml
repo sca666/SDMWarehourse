@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xin.cymall.dao.OutputdetailDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="xin.cymall.entity.Outputdetail" id="outputdetailMap">
+        <result property="outputdetailId" column="outputDetail_id"/>
+        <result property="outputmainId" column="outputMain_id"/>
+        <result property="companyId" column="company_id"/>
+        <result property="commodityId" column="commodity_id"/>
+        <result property="outputnum" column="outputNum"/>
+        <result property="outputDate" column="output_date"/>
+        <result property="driverId" column="Driver_id"/>
+        <result property="carId" column="Car_id"/>
+        <result property="paymenttype" column="paymentType"/>
+        <result property="basicrentId" column="basicRent_id"/>
+        <result property="loadingcost" column="loadingCost"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="get" resultType="xin.cymall.entity.Outputdetail">
+		select * from t_outputdetail where outputDetail_id = #{value}
+	</select>
+
+	<select id="getList" resultType="xin.cymall.entity.Outputdetail">
+		select * from t_outputdetail t <include refid="where_clause" />
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by outputDetail_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="getCount" resultType="int">
+		select count(*) from t_outputdetail t  <include refid="where_clause" />
+	</select>
+
+    <!-- 搜索数据区域 -->
+    <sql id="where_clause">
+        <where>
+            1=1
+            <if test="outputdetailId != null and outputdetailId != ''"> and t.outputDetail_id = #{outputdetailId} </if>
+    		<if test="outputdetailIdVague != null and outputdetailIdVague != ''"> and t.outputDetail_id like concat('%',#{outputdetailIdVague},'%') </if>
+            <if test="outputmainId != null and outputmainId != ''"> and t.outputMain_id = #{outputmainId} </if>
+    		<if test="outputmainIdVague != null and outputmainIdVague != ''"> and t.outputMain_id like concat('%',#{outputmainIdVague},'%') </if>
+            <if test="companyId != null and companyId != ''"> and t.company_id = #{companyId} </if>
+    		<if test="companyIdVague != null and companyIdVague != ''"> and t.company_id like concat('%',#{companyIdVague},'%') </if>
+            <if test="commodityId != null and commodityId != ''"> and t.commodity_id = #{commodityId} </if>
+    		<if test="commodityIdVague != null and commodityIdVague != ''"> and t.commodity_id like concat('%',#{commodityIdVague},'%') </if>
+            <if test="outputnum != null and outputnum != ''"> and t.outputNum = #{outputnum} </if>
+    		<if test="outputnumVague != null and outputnumVague != ''"> and t.outputNum like concat('%',#{outputnumVague},'%') </if>
+            <if test="outputDate != null and outputDate != ''"> and t.output_date = #{outputDate} </if>
+    		<if test="outputDateVague != null and outputDateVague != ''"> and t.output_date like concat('%',#{outputDateVague},'%') </if>
+            <if test="driverId != null and driverId != ''"> and t.Driver_id = #{driverId} </if>
+    		<if test="driverIdVague != null and driverIdVague != ''"> and t.Driver_id like concat('%',#{driverIdVague},'%') </if>
+            <if test="carId != null and carId != ''"> and t.Car_id = #{carId} </if>
+    		<if test="carIdVague != null and carIdVague != ''"> and t.Car_id like concat('%',#{carIdVague},'%') </if>
+            <if test="paymenttype != null and paymenttype != ''"> and t.paymentType = #{paymenttype} </if>
+    		<if test="paymenttypeVague != null and paymenttypeVague != ''"> and t.paymentType like concat('%',#{paymenttypeVague},'%') </if>
+            <if test="basicrentId != null and basicrentId != ''"> and t.basicRent_id = #{basicrentId} </if>
+    		<if test="basicrentIdVague != null and basicrentIdVague != ''"> and t.basicRent_id like concat('%',#{basicrentIdVague},'%') </if>
+            <if test="loadingcost != null and loadingcost != ''"> and t.loadingCost = #{loadingcost} </if>
+    		<if test="loadingcostVague != null and loadingcostVague != ''"> and t.loadingCost like concat('%',#{loadingcostVague},'%') </if>
+            <if test="remark != null and remark != ''"> and t.remark = #{remark} </if>
+    		<if test="remarkVague != null and remarkVague != ''"> and t.remark like concat('%',#{remarkVague},'%') </if>
+        </where>
+    </sql>
+	 
+	<insert id="save" parameterType="xin.cymall.entity.Outputdetail" useGeneratedKeys="true" keyProperty="outputdetailId">
+		insert into t_outputdetail
+		(
+			`outputMain_id`, 
+			`company_id`, 
+			`commodity_id`, 
+			`outputNum`, 
+			`output_date`, 
+			`Driver_id`, 
+			`Car_id`, 
+			`paymentType`, 
+			`basicRent_id`, 
+			`loadingCost`, 
+			`remark`
+		)
+		values
+		(
+			#{outputmainId}, 
+			#{companyId}, 
+			#{commodityId}, 
+			#{outputnum}, 
+			#{outputDate}, 
+			#{driverId}, 
+			#{carId}, 
+			#{paymenttype}, 
+			#{basicrentId}, 
+			#{loadingcost}, 
+			#{remark}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="xin.cymall.entity.Outputdetail">
+		update t_outputdetail 
+		<set>
+			<if test="outputmainId != null">`outputMain_id` = #{outputmainId}, </if>
+			<if test="companyId != null">`company_id` = #{companyId}, </if>
+			<if test="commodityId != null">`commodity_id` = #{commodityId}, </if>
+			<if test="outputnum != null">`outputNum` = #{outputnum}, </if>
+			<if test="outputDate != null">`output_date` = #{outputDate}, </if>
+			<if test="driverId != null">`Driver_id` = #{driverId}, </if>
+			<if test="carId != null">`Car_id` = #{carId}, </if>
+			<if test="paymenttype != null">`paymentType` = #{paymenttype}, </if>
+			<if test="basicrentId != null">`basicRent_id` = #{basicrentId}, </if>
+			<if test="loadingcost != null">`loadingCost` = #{loadingcost}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where outputDetail_id = #{outputdetailId}
+	</update>
+	
+	<delete id="delete">
+		delete from t_outputdetail where outputDetail_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from t_outputdetail where outputDetail_id in 
+		<foreach item="outputdetailId" collection="array" open="(" separator="," close=")">
+			#{outputdetailId}
+		</foreach>
+	</delete>
+
+</mapper>
